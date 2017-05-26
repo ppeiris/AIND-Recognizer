@@ -17,6 +17,7 @@ class ModelSelector(object):
                  n_constant=3,
                  min_n_components=2, max_n_components=10,
                  random_state=14, verbose=False):
+
         self.words = all_word_sequences
         self.hwords = all_word_Xlengths
         self.sequences = all_word_sequences[this_word]
@@ -29,6 +30,7 @@ class ModelSelector(object):
         self.verbose = verbose
 
     def select(self):
+        print('I am in the main select method')
         raise NotImplementedError
 
     def base_model(self, num_states):
@@ -100,9 +102,29 @@ class SelectorCV(ModelSelector):
     ''' select best model based on average log Likelihood of cross-validation folds
 
     '''
-
     def select(self):
+        """ select the best model for self.this_word based on
+        CV score for n between self.min_n_components and self.max_n_components
+        It is based on log likehood
+        :return: GaussianHMM object
+        """
         warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-        # TODO implement model selection using CV
-        raise NotImplementedError
+        try:
+            best_score = float("Inf")
+            split_method = KFold(n_splits=2)
+            best_model = None
+            for n in range(self.min_n_components, self.max_n_components + 1):
+                _tmp_score = []
+                for train_idx, test_idx in split_method.split(self.sequences):
+                    self.X, self.lengths = combine_sequences(train_idx, self.sequences)
+                    model = self.base_model(n) # Directly calling the base model method
+                    test_X, test_lengths = combine_sequences(test_idx, self.sequences)
+                    _tmp_score += [(model.score(test_X, test_lengths))]
+
+                if np.mean(_tmp_score) < best_score:
+                    best_score = np.mean(_tmp_score)
+                    best_model = model
+            return best_model
+        except:
+            return self.base_model(self.n_constant)
