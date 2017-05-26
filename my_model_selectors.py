@@ -79,7 +79,22 @@ class SelectorBIC(ModelSelector):
         warnings.filterwarnings("ignore", category=DeprecationWarning)
 
         # TODO implement model selection based on BIC scores
-        raise NotImplementedError
+        try:
+            best_score = float("Inf")
+            best_model = None
+            for n in range(self.min_n_components, self.max_n_components + 1):
+                model = self.base_model(n) # Directly calling the base model method
+                logL = model.score(self.X, self.lengths)
+                d = model.n_features
+                # BIC = -2 * logL + p * logN
+                BIC = (-2.0 * logL) + (n**2 + 2 * d * n - 1) * (np.log(len(self.X)))
+
+                if BIC < best_score:
+                    best_score = BIC
+                    best_model = model
+            return best_model
+        except:
+            return self.base_model(self.n_constant)
 
 
 class SelectorDIC(ModelSelector):
@@ -95,8 +110,17 @@ class SelectorDIC(ModelSelector):
         warnings.filterwarnings("ignore", category=DeprecationWarning)
 
         # TODO implement model selection based on DIC scores
-        raise NotImplementedError
-
+        try:
+            for n in range(self.min_n_components, self.max_n_components + 1):
+                _tmp_score = []
+                model = self.base_model(n) # Directly calling the base model method
+                for word, X, l in self.hwords.items():
+                    print(word, X, l)
+                    if word != self.this_word:
+                        _tmp_score += [model.score(X, l)]
+                return model.score(self.X, self.lengths) - np.mean(_tmp_score), model
+        except:
+            return self.base_model(self.n_constant)
 
 class SelectorCV(ModelSelector):
     ''' select best model based on average log Likelihood of cross-validation folds
