@@ -1,12 +1,12 @@
 from asl_data import SinglesData, WordsData
 import numpy as np
 from IPython.core.display import display, HTML
-
+import sys
 RAW_FEATURES = ['left-x', 'left-y', 'right-x', 'right-y']
 GROUND_FEATURES = ['grnd-rx', 'grnd-ry', 'grnd-lx', 'grnd-ly']
 
 
-def show_errors(guesses: list, test_set: SinglesData):
+def show_errors(guesses: list, test_set: SinglesData, filename=None):
     """ Print WER and sentence differences in tabular form
 
     :param guesses: list of test item answers, ordered
@@ -16,6 +16,11 @@ def show_errors(guesses: list, test_set: SinglesData):
 
     WER = (S+I+D)/N  but we have no insertions or deletions for isolated words so WER = S/N
     """
+    default_stdout = sys.stdout
+    if filename:
+        sys.stdout = open(filename + '.txt', 'w')
+        print(filename + ' >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+
     S = 0
     N = len(test_set.wordlist)
     num_test_words = len(test_set.wordlist)
@@ -36,7 +41,8 @@ def show_errors(guesses: list, test_set: SinglesData):
             if recognized_sentence[i] != correct_sentence[i]:
                 recognized_sentence[i] = '*' + recognized_sentence[i]
         print('{:5}: {:60}  {}'.format(video_num, ' '.join(recognized_sentence), ' '.join(correct_sentence)))
-
+    # if filename:
+    sys.stdout = default_stdout
 
 def getKey(item):
     return item[1]
