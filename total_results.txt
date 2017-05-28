@@ -1,0 +1,49 @@
+features_list = [features_ground, features_norm, features_polar, features_custom]
+features_list_name = ['features_ground', 'features_norm', 'features_polar', 'features_custom']
+
+model_selector_list = [SelectorConstant, SelectorDIC, SelectorBIC, SelectorCV]
+model_selector_list_names = ['SelectorConstant', 'SelectorDIC', 'SelectorBIC', 'SelectorCV']
+
+
+
+- SelectorConstant 
+	- features_ground: WER = 0.6685393258426966 (Total correct: 59 out of 178)
+	- features_norm: WER = 0.6235955056179775 (Total correct: 67 out of 178)
+	- features_polar: WER = 0.6179775280898876 (Total correct: 68 out of 178)
+	- features_custom: WER = 0.8539325842696629 (Total correct: 26 out of 178)
+
+- SelectorDIC
+	- features_ground: WER = 0.6685393258426966 (Total correct: 59 out of 178)
+	- features_norm: WER = 0.6235955056179775 (Total correct: 67 out of 178)
+	- features_polar: WER = 0.6179775280898876 (Total correct: 68 out of 178)
+	- features_custom: WER = 0.8539325842696629 (Total correct: 26 out of 178)
+
+- SelectorBIC
+	- features_ground: WER = 0.5449438202247191 (Total correct: 81 out of 178) 
+	- features_norm: WER = 0.6123595505617978 (Total correct: 69 out of 178)
+	- features_polar: WER = 0.5449438202247191 (Total correct: 81 out of 178)
+	- features_custom: WER = 0.8539325842696629 (Total correct: 26 out of 178)
+
+- SelectorCV
+	- features_ground: WER = 0.6404494382022472 (Total correct: 64 out of 178)
+	- features_norm: WER = 0.6292134831460674 (Total correct: 66 out of 178)
+	- features_polar: WER = 0.6685393258426966 (Total correct: 59 out of 178)
+	- features_custom: WER = 0.8370786516853933 (Total correct: 29 out of 178)
+
+
+
+
+
+
+tresult['SelectorConstant'] =[0.6685393258426966, 0.6235955056179775, 0.6179775280898876, 0.8539325842696629]
+tresult['SelectorDIC'] = [0.6685393258426966, 0.6235955056179775, 0.6179775280898876, 0.8539325842696629]
+tresult['SelectorBIC'] = [0.5449438202247191, 0.6123595505617978, 0.5449438202247191, 0.8539325842696629]
+tresult['SelectorCV'] = [0.6404494382022472, 0.6292134831460674, 0.6685393258426966, 0.8370786516853933]
+
+
+
+
+
+
+
+
